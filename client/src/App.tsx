@@ -1,69 +1,103 @@
-import React, { useEffect, useState } from 'react'
-import TodoItem from './components/TodoItem'
-import AddTodo from './components/AddTodo'
-import { getTodos, addTodo, updateTodo, deleteTodo } from './API'
+import axios, { AxiosResponse } from 'axios'
+import React, { useState } from 'react'
 
-const App: React.FC = () => {
-  const [todos, setTodos] = useState<ITodo[]>([])
-
-  useEffect(() => {
-    fetchTodos()
-  }, [])
-
-  const fetchTodos = (): void => {
-    getTodos()
-    .then(({ data: { todos } }: ITodo[] | any) => setTodos(todos))
-    .catch((err: Error) => console.log(err))
-  }
-
- const handleSaveTodo = (e: React.FormEvent, formData: ITodo): void => {
-   e.preventDefault()
-   addTodo(formData)
-   .then(({ status, data }) => {
-    if (status !== 201) {
-      throw new Error('Error! Todo not saved')
-    }
-    setTodos(data.todos)
-  })
-  .catch((err) => console.log(err))
+const getCounters = (): Promise<AxiosResponse<{ counters: Record<string, number> }>> => {
+    return axios.get(
+        'http://localhost:4000/counters',
+        {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
+        }
+    );
 }
 
-  const handleUpdateTodo = (todo: ITodo): void => {
-    updateTodo(todo)
-    .then(({ status, data }) => {
-        if (status !== 200) {
-          throw new Error('Error! Todo not updated')
-        }
-        setTodos(data.todos)
-      })
-      .catch((err) => console.log(err))
-  }
+const createUser = (
+    username: string,
+): Promise<AxiosResponse<{ username: string }>> => {
+    return axios.post(
+        'http://localhost:4000/login',
+        {
+            username,
+        },
+    )
+}
 
-  const handleDeleteTodo = (_id: string): void => {
-    deleteTodo(_id)
-    .then(({ status, data }) => {
-        if (status !== 200) {
-          throw new Error('Error! Todo not deleted')
-        }
-        setTodos(data.todos)
-      })
-      .catch((err) => console.log(err))
-  }
+const increaseCounter = (
+    username: string,
+): Promise<AxiosResponse<{ counters: Record<string, number> }>> => {
+    return axios.put(
+        'http://localhost:4000/counters/' + username,
+    )
+}
 
-  return (
-    <main className='App'>
-      <h1>My Todos</h1>
-      <AddTodo saveTodo={handleSaveTodo} />
-      {todos.map((todo: ITodo) => (
-        <TodoItem
-          key={todo._id}
-          updateTodo={handleUpdateTodo}
-          deleteTodo={handleDeleteTodo}
-          todo={todo}
-        />
-      ))}
-    </main>
-  )
+const App: React.FC = () => {
+    const [loggedInAs, setLoggedInAs] = useState<string | undefined>(undefined);
+    const [username, setUsername] = useState<string>('');
+    const [counters, setCounters] = useState<Record<string, number>>({});
+
+    const login = (e: React.FormEvent<HTMLFormElement>): void => {
+        e.preventDefault();
+        createUser(username)
+            .then((response) => setLoggedInAs(response.data.username))
+            .then(() => fetchCounters())
+            .catch(console.error);
+    }
+
+    const fetchCounters = (): void => {
+        getCounters()
+            .then((response) => setCounters(response.data.counters))
+            .catch(console.error);
+    }
+
+    const handleUsernameChange = (e: React.FormEvent<HTMLInputElement>): void => {
+        e.preventDefault();
+        setUsername(e.currentTarget.value);
+    };
+
+    const handleIncreaseCounter = (e: React.FormEvent<HTMLButtonElement>): void => {
+        e.preventDefault();
+        increaseCounter(username)
+            .then((response) => setCounters(response.data.counters))
+            .catch(console.error);
+    };
+
+    const handleLogout = (): void => {
+        setLoggedInAs(undefined)
+    };
+
+    return (
+        <main className='App'>
+            {
+                loggedInAs === undefined
+                    ? (
+                        <div>
+                            <h1>Welcome</h1>
+                            <form onSubmit={login}>
+                                <input type='text' name='username' value={username} placeholder='Username' onChange={handleUsernameChange} />
+                                <input type='submit' value='Login' />
+                            </form>
+                        </div>
+                    )
+                    : (
+                        <div>
+                            <h1>Counters</h1>
+                            <h3>Logged in as {loggedInAs} (<a href='#' onClick={handleLogout}>logout</a>)</h3>
+                            <div id="counters">
+                                <ul>
+                                    {Object.keys(counters).map((username) => (
+                                        <li key={username}>{username}: {counters[username]}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div id="increase-counter">
+                                <button onClick={handleIncreaseCounter}>Click here!</button>
+                            </div>
+                        </div>
+                    )
+            }
+        </main>
+    )
 }
 
 export default App

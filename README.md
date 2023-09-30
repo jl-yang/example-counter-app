@@ -1,25 +1,43 @@
-# How To Build a Todo App with React, TypeScript, NodeJS, and MongoDB
+# Counter app
 
-In this tutorial, we will be using TypeScript on both sides (server and client) to build a Todo App from scratch with React, NodeJS, Express, and MongoDB.
+This is a very simple (and badly written) application that keeps track of clicks for each user. A user can login with their username and use a button to increase their counter. The app then displays all counters.
 
-So, let's start by planning the API.
+# Instructions
+The server and the client are separate applications. The server can be started with
 
-[Read the article](https://www.ibrahima-ndaw.com/fr/blog/advanced-typescript-cheat-sheet/)
+```
+npm install
+npm run build
+npm run start
+```
 
-- [API with NodeJS, Express, MongoDB and TypeScript](#api-with-nodejs-express-mongodb-and-typescript)
-  - [Setting up](#setting-up)
-  - [Create a Todo Type](#create-a-todo-type)
-  - [Create a Todo Model](#create-a-todo-model)
-  - [Create API controllers](#create-api-controllers)
-    - [Get, Add, Update and Delete Todos](#get-add-update-and-delete-todos)
-  - [Create API routes](#create-api-routes)
-  - [Create a Server](#create-a-server)
-- [Client-side with React and TypeScript](#client-side-with-react-and-typescript)
-  - [Setting up](#setting-up-1)
-  - [Create a Todo Type](#create-a-todo-type-1)
-  - [Fetch data from the API](#fetch-data-from-the-api)
-  - [Create the components](#create-the-components)
-    - [Add Todo Form](#add-todo-form)
-    - [Display a Todo](#display-a-todo)
-  - [Fetch and Display data](#fetch-and-display-data)
-- [Resources](#resources)
+and the client with
+
+```
+npm install
+npm run start
+```
+
+Then, navigating to localhost:3000 will display the login page.
+
+# Tasks
+Your task is to fix and improve the application as much as you can. Do not spend more than a couple of hours on this. If there are still remaining tasks to do, just write down your ideas and we'll go through them in the interview.
+
+Some ideas:
+- Code quality
+- Persistence
+- Displaying counters in a meaningful way
+- Security concerns
+- Supporting simultaneous users
+- Page style
+- Better build pipeline
+- ...
+
+# Discussion
+During the interview, we'll go through your solution and discuss further topics, such as:
+- How would you host this kind of application on AWS?
+- How would you ensure that the application operates correctly in production?
+- How could we achieve low-latency when accessing the application from different parts of the world?
+
+# Submission
+Please put your solution in a Github repository and email us a link to it. Just don't mention Elo so that other applicants can't find it.
