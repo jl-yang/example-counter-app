@@ -1,55 +1,7 @@
-import axios, {AxiosResponse} from 'axios'
-import React, {useState} from 'react'
-
-type Counter = {
-    username: string,
-    count: number,
-}
-
-const getCounters = (): Promise<AxiosResponse<{ counters: Counter[] }>> => {
-    return axios.get(
-        'http://localhost:4000/api/counters',
-        {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            },
-        }
-    );
-}
-
-const loginUser = (
-    username: string,
-    password: string,
-): Promise<AxiosResponse<{ username: string }>> => {
-    return axios.post(
-        'http://localhost:4000/api/users/login',
-        {
-            username,
-            password
-        },
-    )
-}
-
-const increaseCounter = (
-    username: string,
-): Promise<AxiosResponse<{ counters: Counter[] }>> => {
-    return axios.post(
-        'http://localhost:4000/api/counters/increase',
-        {
-            username
-        }
-    )
-}
-
-const logoutUser = (username: string, password: string): Promise<AxiosResponse<void>> => {
-    return axios.post(
-        'http://localhost:4000/api/users/logout',
-        {
-            username,
-            password
-        }
-    )
-}
+import React, { useState } from "react";
+import { Counter } from "./models/Counter";
+import { getCounters, increaseCounter, loginUser, logoutUser } from "./api/counterAppService";
+import CounterTable from "./components/CounterTable";
 
 const App: React.FC = () => {
     const [loggedInAs, setLoggedInAs] = useState<string | undefined>(undefined);
@@ -113,11 +65,7 @@ const App: React.FC = () => {
                             <h1>Counters</h1>
                             <h3>Logged in as {loggedInAs} (<a href='#' onClick={handleLogout}>logout</a>)</h3>
                             <div id="counters">
-                                <ul>
-                                    {counters.map((counter) => (
-                                        <li key={counter.username}>{counter.username}: {counter.count}</li>
-                                    ))}
-                                </ul>
+                                <CounterTable counters={counters} />
                             </div>
                             <div id="increase-counter">
                                 <button onClick={handleIncreaseCounter}>Click here!</button>
