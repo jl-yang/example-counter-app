@@ -6,12 +6,14 @@ const StyledTable = styled.table`
   border-collapse: collapse;
   margin-top: 20px;
 `
+const StyledTableHeader = styled.thead``;
 
-const StyledHeader = styled.th`
+const StyledColumnHeader = styled.th`
   background-color: #123456;
   color: #fff;
   padding: 10px;
-  text-align: left;
+  width: 150px;
+  text-align: center;
 `;
 
 const StyledCell = styled.td`
@@ -29,17 +31,17 @@ const StyledBody = styled.tbody``;
 
 const CounterTable = ({ counters }: { counters: Counter[]; }) => (
   <StyledTable>
-    <StyledHeader>
-      Username
-    </StyledHeader>
-    <StyledHeader>
-      Count
-    </StyledHeader>
+    <StyledTableHeader>
+      <StyledRow>
+        <StyledColumnHeader>Username</StyledColumnHeader>
+        <StyledColumnHeader>Count</StyledColumnHeader>
+      </StyledRow>
+    </StyledTableHeader>
 
     <StyledBody>
       {
         counters.sort((a, b) => b.count - a.count).map((counter) => (
-          <StyledRow>
+          <StyledRow key={counter.username}>
             <StyledCell>{counter.username}</StyledCell>
             <StyledCell>{counter.count}</StyledCell>
           </StyledRow>
