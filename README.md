@@ -8,7 +8,10 @@ The server and the client are separate applications. The server can be started w
 ```
 npm install
 npm run build
+
+./scripts/prepare-local-databases.sh
 npm run start
+# TODO: docker-compose up --build web
 ```
 
 and the client with
@@ -24,14 +27,19 @@ Then, navigating to localhost:3000 will display the login page.
 Your task is to fix and improve the application as much as you can. Do not spend more than a couple of hours on this. If there are still remaining tasks to do, just write down your ideas and we'll go through them in the interview.
 
 Some ideas:
-- Code quality
-- Persistence
-- Displaying counters in a meaningful way
+- Code quality: refactored codebase, added linting (eslint, prettier), unit tests, added logging
+- Persistence: added pg + knex
+- Displaying counters in a meaningful way: TODO: count ranking with styled tables (top 10)
 - Security concerns
-- Supporting simultaneous users
+- Supporting simultaneous users: added with statically added testing users 
 - Page style
-- Better build pipeline
+- Better build pipeline: added Docker
 - ...
+
+Additional ideas or not yet implemented features:
+ - better authz (e.g. certificate, CSRF token, JWT auth), access control for logged-in users / visitors
+ - CI pipeline (Github Actions, more tests, code coverage)
+ - Use messaging / websocket for real-time updates
 
 # Discussion
 During the interview, we'll go through your solution and discuss further topics, such as:
