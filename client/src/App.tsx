@@ -54,8 +54,8 @@ const App: React.FC = () => {
                         <div>
                             <h1>Welcome</h1>
                             <form onSubmit={login}>
-                                <input type='text' name='username' value={username} placeholder='Username' onChange={handleUsernameChange} />
-                                <input type='text' name='password' value={password} placeholder='Password' onChange={handlePasswordChange} />
+                                <input type='text' name='username' value={username} placeholder='Username' autoComplete={"off"} onChange={handleUsernameChange} />
+                                <input type='text' name='password' value={password} placeholder='Password' autoComplete={"off"} onChange={handlePasswordChange} />
                                 <input type='submit' value='Login' />
                             </form>
                         </div>
